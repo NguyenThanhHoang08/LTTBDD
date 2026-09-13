@@ -15,8 +15,8 @@ export default function DiscountBadge({ text }: DiscountBadgeProps) {
 const styles = StyleSheet.create({
   badge: {
     position: 'absolute',
-    top: 8,
-    right: 8,
+    top: 6,
+    left: 6,
     backgroundColor: '#ef4444',
     paddingHorizontal: 8,
     paddingVertical: 4,
