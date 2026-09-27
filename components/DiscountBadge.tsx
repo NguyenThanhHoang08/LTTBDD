@@ -1,30 +1,36 @@
-import { StyleSheet, Text, View } from 'react-native';
+// GIỜ 3 — Bài tập 1: Badge giảm giá / nhãn "Mới" nổi trên ảnh bìa
+// Kỹ thuật: position 'absolute' của badge NEO theo containing block là View cha
+// (View bọc ảnh) — View cha đó phải có position 'relative' thì top/left mới có
+// điểm tựa đúng, chứ không phải theo toàn màn hình.
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
-type DiscountBadgeProps = {
-  text: string;
-};
+export function DiscountBadge({ discountPercent, isNew }: { discountPercent?: number; isNew?: boolean }) {
+  if (!discountPercent && !isNew) return null; // sách bình thường -> không vẽ gì cả
 
-export default function DiscountBadge({ text }: DiscountBadgeProps) {
   return (
-    <View style={styles.badge}>
-      <Text style={styles.badgeText}>{text}</Text>
+    <View style={[styles.badge, isNew && styles.badgeNew]}>
+      <Text style={styles.badgeText}>{isNew ? "Mới" : `-${discountPercent}%`}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   badge: {
-    position: 'absolute',
+    position: "absolute", // thoát khỏi luồng layout bình thường
     top: 6,
-    left: 6,
-    backgroundColor: '#ef4444',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 999,
+    left: 6, // neo theo góc trên-trái của containing block (View bọc ảnh)
+    backgroundColor: "#DC2626", // đỏ nổi bật cho giảm giá
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+  },
+  badgeNew: {
+    backgroundColor: "#F97316", // cam cho nhãn "Mới"
   },
   badgeText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: 'bold',
+    color: "#FFFFFF",
+    fontSize: 11,
+    fontWeight: "700",
   },
 });

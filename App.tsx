@@ -1,47 +1,114 @@
+// GIỜ 5 — Tổng hợp: Bottom Tab Layout & Hoàn thiện ứng dụng
+// Minh hoạ riêng: Bài 1 (TabBar) + Bài 2 (CartScreen, đủ 3 vùng: cuộn / tổng tiền
+// cố định / tab bar cố định). 3 tab còn lại (Trang chủ, Danh mục, Tài khoản) chỉ để
+// TabBar có đủ 4 mục thật như đề bài — nội dung của chúng thuộc Giờ 2 và Giờ 4,
+// nên ở đây chỉ để placeholder, tránh trùng lặp code với project gio2/gio4.
 import React, { useState } from 'react';
-import { View, ScrollView, Text, StyleSheet } from 'react-native';
-import { Header } from './components/Header';
-import { CategoryChips } from './components/CategoryChips';
-import { BookGrid } from './components/BookGrid';
-import { FloatingCartButton } from './components/FloatingCartButton';
-import { BOOKS } from './data';
+import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+
+import { HomeScreen } from './screens/HomeScreen';
+import { BookDetailScreen } from './screens/BookDetailScreen';
+import { CartScreen } from './screens/CartScreen';
+import { TabBar, TabKey } from './components/TabBar';
+
+import { BOOKS, CART_ITEMS } from './data';
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState<TabKey>('home');
+  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const [cartCount, setCartCount] = useState(0);
 
+  const selectedBook =
+    BOOKS.find((b) => b.id === selectedBookId) ?? null;
+
+  const renderContent = () => {
+    // Nếu đang xem chi tiết sách
+    if (selectedBook) {
+      return (
+        <BookDetailScreen
+          book={selectedBook}
+          onBack={() => setSelectedBookId(null)}
+          onAddToCart={() => setCartCount((n) => n + 1)}
+        />
+      );
+    }
+
+    // Tab Trang chủ
+    if (activeTab === 'home') {
+      return (
+        <HomeScreen
+          cartCount={cartCount}
+          onPressBook={(id) => setSelectedBookId(id)}
+          onPressCart={() => setActiveTab('cart')}
+        />
+      );
+    }
+
+    // Tab Giỏ hàng
+    if (activeTab === 'cart') {
+      return <CartScreen items={CART_ITEMS} />;
+    }
+
+    // Tab Danh mục / Tài khoản
+    return <Placeholder tab={activeTab} />;
+  };
+
   return (
-    <View style={styles.screen}>
-      <Header />
+    <SafeAreaView style={styles.root}>
+      <View style={styles.body}>
+        {renderContent()}
 
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.sectionTitle}>Danh mục</Text>
-        <CategoryChips />
+        <TabBar
+          active={activeTab}
+          onChange={(tab) => {
+            setSelectedBookId(null);
+            setActiveTab(tab);
+          }}
+        />
+      </View>
 
-        <Text style={[styles.sectionTitle, styles.bookTitle]}>Sách nổi bật</Text>
-        <BookGrid books={BOOKS} />
-      </ScrollView>
+      <StatusBar style="auto" />
+    </SafeAreaView>
+  );
+}
 
-      <FloatingCartButton count={cartCount} />
+function Placeholder({ tab }: { tab: TabKey }) {
+  const note: Record<TabKey, string> = {
+    home: '',
+    category: 'Nội dung Danh mục',
+    cart: '',
+    account: 'Nội dung Tài khoản',
+  };
+
+  return (
+    <View style={styles.placeholder}>
+      <Text style={styles.placeholderText}>
+        {note[tab]}
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
+  root: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
-  content: {
-    padding: 16,
-    paddingBottom: 100,
+
+  body: {
+    flex: 1,
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1f2937',
-    marginBottom: 10,
+
+  placeholder: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
   },
-  bookTitle: {
-    marginTop: 18,
+
+  placeholderText: {
+    textAlign: 'center',
+    color: '#5B6B7F',
   },
 });
