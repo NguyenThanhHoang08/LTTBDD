@@ -1,8 +1,4 @@
-// GIỜ 5 — Tổng hợp: Bottom Tab Layout & Hoàn thiện ứng dụng
-// Minh hoạ riêng: Bài 1 (TabBar) + Bài 2 (CartScreen, đủ 3 vùng: cuộn / tổng tiền
-// cố định / tab bar cố định). 3 tab còn lại (Trang chủ, Danh mục, Tài khoản) chỉ để
-// TabBar có đủ 4 mục thật như đề bài — nội dung của chúng thuộc Giờ 2 và Giờ 4,
-// nên ở đây chỉ để placeholder, tránh trùng lặp code với project gio2/gio4.
+
 import React, { useState } from 'react';
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';

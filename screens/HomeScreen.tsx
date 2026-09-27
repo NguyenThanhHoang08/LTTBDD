@@ -36,8 +36,6 @@ export function HomeScreen({
         <BookGrid books={BOOKS} onPressBook={onPressBook} />
       </ScrollView>
 
-      {/* Nút nổi nằm NGOÀI ScrollView, song song với nó -> không bị cuộn theo
-          nội dung, luôn nổi cố định ở góc màn hình như đúng yêu cầu. */}
       <FloatingCartButton count={cartCount} onPress={onPressCart} />
     </View>
   );
@@ -53,8 +51,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    // paddingBottom đủ lớn để phần tử cuối của Grid không bị FloatingCartButton
-    // (cao ~80px tính cả khoảng cách đáy) hoặc TabBar (64px, ở App.tsx) che mất.
     paddingBottom: 140,
   },
   sectionTitle: {
